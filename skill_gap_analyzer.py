@@ -289,6 +289,49 @@ def generate_report(config, gap_analysis, recommendations):
         plt.close()
     
     # Generate HTML report
+    # Generate user skills pills
+    user_skills_html = "".join([f'<div class="skill-pill">{skill}</div>' for skill in config['user_skills']])
+    
+    # Generate recommendations HTML
+    recommendations_html = ""
+    for rec in recommendations:
+        # Generate resources HTML
+        resources_html = ""
+        for res in rec['resources']:
+            resources_html += f"""
+            <div class="resource-card">
+                <a href="{res['url']}" target="_blank">{res['platform']}</a>
+                <p>{res['description']}</p>
+            </div>
+            """
+        
+        # Generate projects HTML
+        projects_html = "".join([f'<li>{project}</li>' for project in rec['projects']])
+        
+        recommendations_html += f"""
+        <div class="skill-card">
+            <div class="skill-header">
+                <div class="skill-name">{rec['skill']}</div>
+                <div class="demand">{rec['demand']}</div>
+            </div>
+            
+            <h4>Recommended Learning Resources</h4>
+            <div class="resource-grid">
+                {resources_html}
+            </div>
+            
+            <div class="projects">
+                <h4>Project Ideas to Practice</h4>
+                <ul class="project-list">
+                    {projects_html}
+                </ul>
+            </div>
+        </div>
+        """
+    
+    # Get current date
+    current_date = datetime.now().strftime("%B %d, %Y at %H:%M")
+    
     html_content = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -529,7 +572,7 @@ def generate_report(config, gap_analysis, recommendations):
         <header>
             <div class="container">
                 <h1>Automated Skill Gap Analysis</h1>
-                <p class="date">Generated on {datetime.now().strftime("%B %d, %Y at %H:%M")}</p>
+                <p class="date">Generated on {current_date}</p>
             </div>
         </header>
         
@@ -542,7 +585,7 @@ def generate_report(config, gap_analysis, recommendations):
                     <div class="stat-card">
                         <h3>Jobs Analyzed</h3>
                         <div class="stat-value">{gap_analysis['total_jobs_analyzed']}</div>
-                        <p>Recent job postings across {len(config['job_roles']} roles</p>
+                        <p>Recent job postings across {len(config['job_roles'])} roles</p>
                     </div>
                     
                     <div class="stat-card">
@@ -554,7 +597,7 @@ def generate_report(config, gap_analysis, recommendations):
                     <div class="stat-card">
                         <h3>Your Skills</h3>
                         <div class="user-skills">
-                            {"".join([f'<div class="skill-pill">{skill}</div>' for skill in config['user_skills']])}
+                            {user_skills_html}
                         </div>
                     </div>
                 </div>
@@ -576,31 +619,7 @@ def generate_report(config, gap_analysis, recommendations):
                 <h2>Personalized Learning Recommendations</h2>
                 <p>Based on your skill gaps, here are resources to help you improve:</p>
                 
-                {"".join([f"""
-                <div class="skill-card">
-                    <div class="skill-header">
-                        <div class="skill-name">{rec['skill']}</div>
-                        <div class="demand">{rec['demand']}</div>
-                    </div>
-                    
-                    <h4>Recommended Learning Resources</h4>
-                    <div class="resource-grid">
-                        {"".join([f"""
-                        <div class="resource-card">
-                            <a href="{res['url']}" target="_blank">{res['platform']}</a>
-                            <p>{res['description']}</p>
-                        </div>
-                        """ for res in rec['resources']])}
-                    </div>
-                    
-                    <div class="projects">
-                        <h4>Project Ideas to Practice</h4>
-                        <ul class="project-list">
-                            {"".join([f'<li>{project}</li>' for project in rec['projects']])}
-                        </ul>
-                    </div>
-                </div>
-                """ for rec in recommendations])}
+                {recommendations_html}
             </section>
         </div>
         
