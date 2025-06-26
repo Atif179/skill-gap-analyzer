@@ -1,0 +1,34 @@
+name: Automated Skill Gap Analysis
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'  # Run every Monday at 9 AM UTC
+  workflow_dispatch:     # Allow manual triggering
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      run: |
+        pip install requests beautifulsoup4 pandas matplotlib fake-useragent
+        
+    - name: Run Skill Gap Analyzer
+      run: python skill_gap_analyzer.py
+      
+    - name: Commit and Push Report
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@users.noreply.github.com'
+        git add reports/
+        git commit -m "Automated skill gap report update"
+        git push
