@@ -1,0 +1,33 @@
+{
+    "user_skills": [
+        "Python",
+        "Data Analysis",
+        "Machine Learning"
+        "google analytics",
+        "looker studio",
+        "Tableau",
+        "sql",
+        "product management",
+        "data analytics"
+        
+    ],
+    "job_roles": [
+        "Data analyst",
+        "Machine Learning Engineer"
+        "AI product management",
+        "Digital product management",
+        "Web analyst",
+        "Performance Marketing",
+        "Channel marketing"
+    ],
+    "location": "Germany",
+    "max_pages": 5,
+    "platforms": {
+        "Coursera": "https://www.coursera.org/search?query={}",
+        "edX": "https://www.edx.org/search?q={}",
+        "YouTube": "https://www.youtube.com/results?search_query={}",
+        "Kaggle": "https://www.kaggle.com/search?q={}",
+        "freeCodeCamp": "https://www.freecodecamp.org/news/search/?query={}",
+        "Towards Data Science": "https://towardsdatascience.com/search?q={}"
+    }
+}
